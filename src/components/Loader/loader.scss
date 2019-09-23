@@ -1,0 +1,10 @@
+.loader-home.sixteen.column {
+  background-color: #373f51;
+
+  .ui.segment {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+  }
+}
