@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
 import { Sidebar, Segment } from "semantic-ui-react"
 import Loadable from 'react-loadable';
-import LoaderHome from './components/Loader/loader-home'
+import Loader from './components/Loader/loader'
 import Nav from './components/Nav/Nav'
 import Footer from './components/Footer/Footer'
 import VerticalSidebar from './components/Sidebar/VerticalSidebar'
@@ -13,42 +13,42 @@ import Homepage from './components/Homepage/homepage'
 const HomepageLoadable = Loadable({
   loader: () => import('./components/Homepage/homepage'),
   loading() {
-    return <LoaderHome />
+    return <Loader message={""} loading={true} />
   }
 });
 
 const ContactLoadable = Loadable({
   loader: () => import('./components/Contact/contact'),
   loading() {
-    return <LoaderHome />
+    return <Loader message={""} loading={true} />
   }
 });
 
 const PaymentLoadable = Loadable({
   loader: () => import('./components/Payment/payment'),
   loading() {
-    return <LoaderHome />
+    return <Loader message={""} loading={true} />
   }
 });
 
 const TransactionsLoadable = Loadable({
   loader: () => import('./components/Transactions/transactions'),
   loading() {
-    return <LoaderHome />
+    return <Loader message={""} loading={true} />
   }
 });
 
-const VerifyLoadable = Loadable({
-  loader: () => import('./components/VerifyPage/verifypage'),
+const ThankyouLoadable = Loadable({
+  loader: () => import('./components/ThankyouPage/thankyoupage'),
   loading() {
-    return <LoaderHome />
+    return <Loader message={""} loading={true} />
   }
 });
 
 const ErrorLoadable = Loadable({
   loader: () => import('./components/ErrorPage/errorpage'),
   loading() {
-    return <LoaderHome />
+    return <Loader message={""} loading={true} />
   }
 });
 
@@ -131,7 +131,7 @@ class App extends Component {
                 <Route path={'/contact'} component={ContactLoadable} />
                 <Route path={'/payment'} component={PaymentLoadable} />
                 <Route path={'/transactions'} component={TransactionsLoadable} />
-                <Route path={'/verify/:reference'} component={VerifyLoadable} />
+                <Route path={'/thankyou'} component={ThankyouLoadable} />
                 <Route component={ErrorLoadable} />
               </Switch>
             </Sidebar.Pusher>

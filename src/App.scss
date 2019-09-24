@@ -3,11 +3,11 @@
 .body {
   position: relative;
   *:not(.icon) {
-    font-family: 'Asap', 'Lato', sans-serif !important;
+    font-family: 'Barlow', 'Lato', sans-serif !important;
 
     h1, h2, h3, h4, h5, h6, .ui.header,
     .header {
-      font-family: 'Asap Condensed', 'Lato', sans-serif !important;
+      font-family: 'Barlow', 'Lato', sans-serif !important;
 
       &.section-header {
         font-size: 30px !important;
@@ -71,7 +71,7 @@
 
 
   .ui.button, .ui.statistic {
-    font-family: 'Asap', 'Lato', sans-serif !important;
+    font-family: 'Barlow', 'Lato', sans-serif !important;
   }
 
   .pushable:not(body) {
@@ -151,16 +151,16 @@
 
 .modal {
   *:not(.icon) {
-    font-family: 'Asap', 'Lato', sans-serif !important;
+    font-family: 'Barlow', 'Lato', sans-serif !important;
 
     h1, h2, h3, h4, h5, h6, .ui.header,
     .header {
-      font-family: 'Asap Condensed', 'Lato', sans-serif !important;
+      font-family: 'Barlow', 'Lato', sans-serif !important;
     }
   }
 
   .ui.button, .ui.statistic {
-    font-family: 'Asap', 'Lato', sans-serif !important;
+    font-family: 'Barlow', 'Lato', sans-serif !important;
   }
 
   @media (min-width: 769px) {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { Grid, Container } from 'semantic-ui-react'
-import './verifypage.scss'
+import './thankyoupage.scss'
 import Footer from '../Footer/Footer'
 import Aux from '../../hoc/Aux'
 

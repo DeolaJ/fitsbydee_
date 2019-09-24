@@ -1,21 +1,24 @@
 import React, {Component} from 'react'
-import { Grid, Header, Form, Button, Container, Message, TextArea } from 'semantic-ui-react'
+import { Grid, Header, Container, Form, Button, Transition, Message, TextArea } from 'semantic-ui-react'
 import Aux from '../../hoc/Aux'
 import './contact.scss'
 import axios from 'axios'
 import firebase from '../../firebase'
+import Loader from '../Loader/loader'
 
 class Contact extends Component {
 
   constructor (props) {
     super (props)
     this.state= {
+      loading: false,
       email: '',
       full_name: '',
       message: '', 
       emailValid: false,
       formValid: false,
       mobile: null,
+      response: null,
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -34,6 +37,29 @@ class Contact extends Component {
         mobile: false
       })
     }
+  }
+
+  startLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  endLoading = (status) => () => {
+    this.setState( status === "success" ? {
+      loading: false,
+      email: '',
+      full_name: '',
+      message: '',
+      response: 'Your message was sent successfully'
+    } 
+    : 
+    { 
+      loading: false,
+      response: 'There was an error'
+    })
+
+    setTimeout(() => (this.setState({ response: null })), 3000)
   }
 
   updateValue = () => {
@@ -83,17 +109,30 @@ class Contact extends Component {
   }
 
   sendMessage = () => {
-    const { email, full_name, message } = this.state
+    const { email, full_name, message, formValid } = this.state
 
-    axios.post('/contact-form', {
-        "email": email,
-        "name": full_name,
-        "message": message
-      }).then(response => {
-      console.log(response);
-    }).catch(error => {
-      console.log(error);
-    })
+    const { unload } = this.props
+
+    if (formValid === false) {
+      document.getElementById("email").focus()
+    }
+
+    if (formValid === true) {
+      this.startLoading()
+
+      axios.post('/contact-form', {
+          "email": email,
+          "name": full_name,
+          "message": message
+        }).then(response => {
+        console.log(response);
+        this.endLoading("success");
+        unload();
+      }).catch(error => {
+        console.log(error);
+        this.endLoading("fail")
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -102,7 +141,8 @@ class Contact extends Component {
 
   render () {
 
-    const { email, full_name, message, mobile } = this.state;
+    const { email, full_name, message, mobile, loading, response } = this.state;
+    console.log(this.state)
 
     return (
       <Grid stackable className={'contact-container'}>
@@ -115,6 +155,16 @@ class Contact extends Component {
               <Header.Subheader>For requests and enquiries</Header.Subheader>
             </Header>
 
+            {
+              response &&
+              
+              <Transition.Group animation={'fly down'} duration={700}>
+                <Container textAlign="center">
+                  <p>{response}</p>
+                </Container>
+              </Transition.Group>
+            }
+            
             <Form>
               <Form.Input width={16} required label={"Full name"} value={full_name} name="full_name" placeholder='First name, Last name' onChange={this.handleChange} />
               
@@ -128,13 +178,19 @@ class Contact extends Component {
               </Message>
               <Form.Field width={16}>
                 <label>Message</label>
-                <TextArea placeholder='Enter your request or enquiry' value={message} name="messsage" rows={4} onChange={this.handleChange}></TextArea>
+                <TextArea placeholder='Enter your request or enquiry' value={message} name="message" rows={4} onChange={this.handleChange}></TextArea>
               </Form.Field>
               <Button type='submit' floated="right" className={'primary-sub'} onClick={this.sendMessage}>Send</Button>
             </Form>
           </div>
 
         </Grid.Column>
+
+        {
+          loading && 
+
+          <Loader loading={loading} message={"Sending"} />
+        }
       </Grid>
     )
   }

@@ -17,11 +17,11 @@ class CheckoutForm extends Component {
       files: [],
       fileUploading: [],
       email: '',
-      full_name: '', 
-      last_name: '', 
+      full_name: '',
       description: '', 
       address: '',
       size: '',
+      gender: '',
       loading: false,
       emailValid: false,
       formValid: false
@@ -50,15 +50,15 @@ class CheckoutForm extends Component {
       .ref("cvs")
   }
 
-  getReference = () => {
-    let text = "";
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
+  // getReference = () => {
+  //   let text = "";
+  //   let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
 
-    for( let i=0; i < 15; i++ )
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  //   for( let i=0; i < 15; i++ )
+  //     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return text;
-  }
+  //   return text;
+  // }
 
   startLoading = () => {
     this.setState({
@@ -85,7 +85,6 @@ class CheckoutForm extends Component {
     }
   }
 
-
   validateField = (fieldName, value) => {
     let emailValid = this.state.emailValid;
   
@@ -111,15 +110,52 @@ class CheckoutForm extends Component {
   }
 
   orderNow = () => {
-    this.setState({
-      yes: 'yes'
-    })
+    const { email, full_name, description, address, gender, size, formValid } = this.state
+
+    const { unload } = this.props
+
+    if (formValid === false) {
+      document.getElementById("email").focus()
+    }
+
+    if (formValid === true) {
+      this.startLoading()
+
+      axios.post('/order-form', {
+          "email": email,
+          "name": full_name,
+          "desscription": description,
+          "address": address,
+          "size": size,
+          "gender": gender
+        }).then(response => {
+        console.log(response);
+        this.endLoading("success");
+        unload();
+      }).catch(error => {
+        console.log(error);
+        this.endLoading("fail")
+      })
+    }
   }
 
   render () {
-    const { progress, complete, files, fileUploading, 
-      email, full_name, description, address, size
+    const { progress, complete, files, fileUploading, gender, 
+      email, full_name, description, address, size, loading
     } = this.state
+
+    const sizes = [
+      { key: 's', text: 'Small', value: 'male' },
+      { key: 'm', text: 'Medium', value: 'female' },
+      { key: 'l', text: 'Female', value: 'female' },
+      { key: 'xl', text: 'Female', value: 'female' },
+      { key: 'o', text: 'Other (include in description)', value: 'other' }
+    ]
+
+    const genders = [
+      { key: 'm', text: 'Male', value: 'male' },
+      { key: 'm', text: 'Female', value: 'female' }
+    ]
 
     console.log(this.state)
 
@@ -141,11 +177,12 @@ class CheckoutForm extends Component {
             <label>Delivery Address (OPTIONAL)</label>
             <TextArea placeholder='Enter your Home Address' value={address} name="address" rows={2} onChange={this.handleChange}></TextArea>
           </Form.Field>
+          <Form.Select options={sizes} id={'size'} label={"Size (OPTIONAL)"} value={size} name="size" placeholder='Enter your desired size' onChange={this.handleChange} />
+          <Form.Select options={genders} label={"Gender (OPTIONAL)"} value={gender} name="gender" placeholder='Gender' onChange={this.handleChange} />
           <Form.Field>
             <label>Brief Description (OPTIONAL)</label>
             <TextArea placeholder='Enter a brief description of your order' value={description} rows={2} name="description" onChange={this.handleChange}></TextArea>
           </Form.Field>
-          <Form.Input id={'size'} required label={"Size"} value={size} name="size" placeholder='Enter your desired size' onChange={this.handleChange} />
           <Form.Group className={'upload-field'}>
             <Form.Field required>
               <label>
@@ -155,7 +192,7 @@ class CheckoutForm extends Component {
               <FileUploader
                 multiple
                 accept=".png,.pdf,.jpg"
-                storageRef={firebase.storage().ref('cvs')}
+                storageRef={firebase.storage().ref('orderpicture')}
                 onUploadStart={this.handleUploadStart}
                 onUploadError={this.handleUploadError}
                 onUploadSuccess={this.handleUploadSuccess}
@@ -194,6 +231,13 @@ class CheckoutForm extends Component {
           </Form.Group>
           <Button type='submit' className={'order-button'} floated="right" onClick={this.orderNow}>Place an Order</Button>
         </Form>
+
+
+        {
+          loading && 
+
+          <Loader loading={loading} message={"Processing order"} />
+        }
 
       </Aux>
     )
