@@ -8,6 +8,7 @@ import LoaderHome from './components/Loader/loader-home'
 import Nav from './components/Nav/Nav'
 import Footer from './components/Footer/Footer'
 import VerticalSidebar from './components/Sidebar/VerticalSidebar'
+import Homepage from './components/Homepage/homepage'
 
 const HomepageLoadable = Loadable({
   loader: () => import('./components/Homepage/homepage'),
@@ -79,11 +80,7 @@ class App extends Component {
     window.addEventListener("resize", this.updateValue)
     const url = window.location.href
 
-    if (url.includes("contact")) {
-      this.setState({ activeitem: "contact"})
-    } else {
-      this.setState({ activeitem: "home"})
-    }
+    this.setState(url.includes("contact") ? { activeitem: "contact"} : (url.includes("payment") ? { activeitem: "contact"} : { activeitem: "home"}))
 
     if (body <= 768 ) {
       this.setState({
@@ -116,21 +113,21 @@ class App extends Component {
   }
  
   render () {
-    const { navItems, mobile, animation, dimmed, direction, visible, navVisible } = this.state
+    const { navItems, mobile, animation, activeitem, dimmed, direction, visible, navVisible } = this.state
     
     return (
       <div className={'body'}>
 
         <Router basename={'/'}>
 
-          <Nav navItems={navItems} mobile={mobile} handleSidebar={this.handleSidebar} changeActiveState={this.changeActiveState} navVisible={navVisible} />
+          <Nav navItems={navItems} activeitem={activeitem} mobile={mobile} handleSidebar={this.handleSidebar} changeActiveState={this.changeActiveState} navVisible={navVisible} />
 
           <Sidebar.Pushable as={Segment} style={{margin: '0', border: 'none' }} >
-            <VerticalSidebar animation={animation} direction={direction} visible={visible} handleSidebar={this.handleSidebar}  changeActiveState={this.changeActiveState} navItems={navItems} />
+            <VerticalSidebar activeitem={activeitem} animation={animation} direction={direction} visible={visible} handleSidebar={this.handleSidebar}  changeActiveState={this.changeActiveState} navItems={navItems} />
 
             <Sidebar.Pusher dimmed={dimmed && visible} onClick={ !visible ? null : this.handleSidebar} >
               <Switch>
-                <Route exact path={'/'} component={HomepageLoadable} />
+                <Route exact path={'/'} component={Homepage} />
                 <Route path={'/contact'} component={ContactLoadable} />
                 <Route path={'/payment'} component={PaymentLoadable} />
                 <Route path={'/transactions'} component={TransactionsLoadable} />

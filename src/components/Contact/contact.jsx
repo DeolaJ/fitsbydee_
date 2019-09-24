@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Grid, Header, Form, Button, Container, TextArea } from 'semantic-ui-react'
+import { Grid, Header, Form, Button, Container, Message, TextArea } from 'semantic-ui-react'
 import Aux from '../../hoc/Aux'
 import './contact.scss'
 import axios from 'axios'
@@ -82,6 +82,20 @@ class Contact extends Component {
     });
   }
 
+  sendMessage = () => {
+    const { email, full_name, message } = this.state
+
+    axios.post('/contact-form', {
+        "email": email,
+        "name": full_name,
+        "message": message
+      }).then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateValue)
   }
@@ -105,12 +119,18 @@ class Contact extends Component {
               <Form.Input width={16} required label={"Full name"} value={full_name} name="full_name" placeholder='First name, Last name' onChange={this.handleChange} />
               
               <Form.Input id={'email'} width={16} required label={"Email address"} value={email} name="email" placeholder='Enter your email address' onChange={this.handleChange} />
-              
+              <Message
+                error
+                visible={(this.state.email.length > 0) && !this.state.emailValid}
+                size="small"
+              >
+                <p>Email address is invalid</p>
+              </Message>
               <Form.Field width={16}>
                 <label>Message</label>
                 <TextArea placeholder='Enter your request or enquiry' value={message} name="messsage" rows={4} onChange={this.handleChange}></TextArea>
               </Form.Field>
-              <Button type='submit' floated="right" className={'primary-sub'} onClick={this.orderNow}>Send</Button>
+              <Button type='submit' floated="right" className={'primary-sub'} onClick={this.sendMessage}>Send</Button>
             </Form>
           </div>
 

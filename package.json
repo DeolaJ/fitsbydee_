@@ -9,6 +9,7 @@
     "express-favicon": "^2.0.1",
     "firebase": "^6.6.2",
     "node-sass": "^4.12.0",
+    "nodemailer": "^6.3.0",
     "path": "^0.12.7",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
@@ -45,5 +46,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8088"
 }

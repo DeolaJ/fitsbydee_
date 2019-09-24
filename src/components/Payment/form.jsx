@@ -17,7 +17,7 @@ class CheckoutForm extends Component {
       files: [],
       fileUploading: [],
       email: '',
-      first_name: '', 
+      full_name: '', 
       last_name: '', 
       description: '', 
       address: '',
@@ -117,8 +117,8 @@ class CheckoutForm extends Component {
   }
 
   render () {
-    const { progress, complete, files, fileUploading, loading,
-      email, first_name, last_name, description, address, size
+    const { progress, complete, files, fileUploading, 
+      email, full_name, description, address, size
     } = this.state
 
     console.log(this.state)
@@ -126,10 +126,9 @@ class CheckoutForm extends Component {
     return (
       <Aux>
         <Form>
-          <Form.Group style={{ marginBottom: '0' }}>
-            <Form.Input width={8} required label={"First name"} value={first_name} name="first_name" placeholder='Enter your first name' onChange={this.handleChange} />
-            <Form.Input width={8} required label={"Last name"} value={last_name} name="last_name" placeholder='Enter your last name' onChange={this.handleChange} />
-          </Form.Group>
+
+          <Form.Input width={16} required label={"First name"} value={full_name} name="full_name" placeholder='First name, Last name' onChange={this.handleChange} />
+          
           <Form.Input id={'email'} required label={"Email address"} value={email} name="email" placeholder='Enter your email address' onChange={this.handleChange} />
           <Message
             error
@@ -139,12 +138,12 @@ class CheckoutForm extends Component {
             <p>Email address is invalid</p>
           </Message>
           <Form.Field>
-            <label>House Address (OPTIONAL)</label>
+            <label>Delivery Address (OPTIONAL)</label>
             <TextArea placeholder='Enter your Home Address' value={address} name="address" rows={2} onChange={this.handleChange}></TextArea>
           </Form.Field>
           <Form.Field>
-            <label>Brief Description of Order (OPTIONAL)</label>
-            <TextArea placeholder='Enter a brief description of your request' value={description} rows={2} name="description" onChange={this.handleChange}></TextArea>
+            <label>Brief Description (OPTIONAL)</label>
+            <TextArea placeholder='Enter a brief description of your order' value={description} rows={2} name="description" onChange={this.handleChange}></TextArea>
           </Form.Field>
           <Form.Input id={'size'} required label={"Size"} value={size} name="size" placeholder='Enter your desired size' onChange={this.handleChange} />
           <Form.Group className={'upload-field'}>
@@ -193,7 +192,7 @@ class CheckoutForm extends Component {
               <Checkbox label='I agree to the Terms and Conditions' />
             </Form.Field>
           </Form.Group>
-          <Button fluid type='submit' className={'primary-main'} onClick={this.orderNow}>Place an Order</Button>
+          <Button type='submit' className={'order-button'} floated="right" onClick={this.orderNow}>Place an Order</Button>
         </Form>
 
       </Aux>

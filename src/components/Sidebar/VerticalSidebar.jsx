@@ -28,17 +28,17 @@ class VerticalSidebar extends Component {
             <img src={logo} alt="logo" />
           </Menu.Item>
           {
-            navItems.map(navItem => (
-              <Menu.Item key={navItem.id} as={Link} to={navItem.link} 
+            navItems.map(item => (
+              <Menu.Item key={item.id} as={Link} to={item.link} active={activeitem === item.id}
                 onClick={changeActiveState}>
-                {navItem.name}
+                {item.name}
               </Menu.Item>
             ))
           }
 
           <Menu.Item as='div'>
             <Link to='/payment'>
-              <Button className={'primary-main'}>
+              <Button className={'primary-main'} id="payment" onClick={changeActiveState}>
                 Order now
               </Button>
             </Link>

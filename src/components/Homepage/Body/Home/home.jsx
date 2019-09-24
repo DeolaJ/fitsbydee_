@@ -18,7 +18,7 @@ class Home extends Component {
           </div>
         </div>
         <Grid.Column width={16}>
-          <Container textAlign={mobile ? 'center' : 'left'} className={'home-content-container'}>
+          <Container fluid textAlign={mobile ? 'center' : 'left'} className={'home-content-container'}>
             <Header as='h1' className={'hide-on-mobile'}>
               <Typist cursor={{
                 show: false,
@@ -44,7 +44,7 @@ class Home extends Component {
             </Header>
             <div className={'header-content'}>
               <p>
-                Get amaxing plain tees, sweat pants, hoodies, 
+                Get amazing plain tees, sweat pants, hoodies, 
                 <br/>
                 shorts and caps at amazing prices. 
                 <br/>

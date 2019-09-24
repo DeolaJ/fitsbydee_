@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react'
-import { Grid, Button, Container, Icon, Dropdown, Header, Divider, Table, Step } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Grid, Container, Header } from 'semantic-ui-react'
 import './payment.scss'
 import CheckoutForm from './form'
 import firebase from '../../firebase'
-import Aux from '../../hoc/Aux'
 
 class Payment extends PureComponent {
 
@@ -26,7 +24,7 @@ class Payment extends PureComponent {
     window.addEventListener("beforeunload", this.onUnload)
     var db = firebase.firestore()
     if (!mobile) {
-      const body = document.querySelector('.payment-container').clientWidth
+      const body = document.querySelector('body').clientWidth
       mobile = body <= 768 ? true : false
       this.setState({
         mobile,
@@ -36,7 +34,7 @@ class Payment extends PureComponent {
   }
 
   updateValue = () => {
-    const body = document.querySelector('.payment-container').clientWidth
+    const body = document.querySelector('body').clientWidth
     const mobile = body <= 768 ? true : false
     this.setState({
       mobile: mobile
@@ -65,17 +63,19 @@ class Payment extends PureComponent {
     return (
       <Grid className={'payment-container'}>
 
-          <Grid.Column width={16} className={'stageone-row'}>
-            <div className={'return-link'}>
-              <Link to='/'>
-                <Button className={'primary-sub'}>
-                  <Icon name='chevron left' /> Return to Home
-                </Button>
-              </Link>
-            </div>
-          </Grid.Column>
+        <Grid.Column width={16}>
 
-          <CheckoutForm db={db} mobile={mobile} unload={this.unloadForm} />
+          <Container className={'checkout-form'}>
+
+            <Header as="h2" className={"section-title"} textAlign="center">
+              Order Form
+            </Header>
+            <br/>
+            <CheckoutForm db={db} mobile={mobile} unload={this.unloadForm} />
+
+          </Container>
+
+        </Grid.Column>
 
       </Grid>
     )

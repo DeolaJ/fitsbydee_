@@ -35,7 +35,7 @@ class Nav extends Component {
               }
               <List.Item>
                 <Link to='/payment'>
-                  <Button className={'primary-main'}>Order now</Button>
+                  <Button className={'primary-main'} id="payment" onClick={changeActiveState}>Order now</Button>
                 </Link>
               </List.Item>
             </List>
@@ -55,7 +55,7 @@ class Nav extends Component {
 
               <Grid.Column textAlign='right'>
                 <Link to='/payment'>
-                  <Button className={'primary-main icon'}>
+                  <Button className={'primary-main icon'} id="payment" onClick={changeActiveState}>
                     <Icon size='large' name='location arrow'/>
                   </Button>
                 </Link>
