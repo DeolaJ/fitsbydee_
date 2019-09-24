@@ -51,10 +51,6 @@ class Payment extends PureComponent {
       event.returnValue = "Hellooww"
   }
 
-  unloadForm = () => {
-    window.removeEventListener("beforeunload", this.onUnload)
-  }
-
   render () {
 
     const {  mobile } = this.state
@@ -71,7 +67,7 @@ class Payment extends PureComponent {
               Order Form
             </Header>
             <br/>
-            <CheckoutForm db={db} mobile={mobile} unload={this.unloadForm} />
+            <CheckoutForm db={db} mobile={mobile} />
 
           </Container>
 

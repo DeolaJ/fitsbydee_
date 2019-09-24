@@ -4,39 +4,46 @@ import { Link } from 'react-router-dom'
 import './errorpage.scss'
 import Footer from '../Footer/Footer'
 import Aux from '../../hoc/Aux'
-import errorIcon from '../../images/logo.png'
+import errorIcon from '../../images/logowhitebox.png'
 
 class ErrorPage extends Component {
 
   render () {
 
     return (
-      <Aux>
-        <Grid className={'errorpage-container'}>
-          <Grid.Column width={16}>
-            <Container>
-              <Header as='h1'>
-                Oops, Lets take you home
-              </Header>
-              <img src={errorIcon} alt='404 page illustration' style={{ width: '100%' }} />
+      <Grid className={'errorpage-container'}>
+        <Grid.Column width={16}>
+          <Container textAlign="center">
+            
+            <Header as='h1'>
+              Oops, Lets take you home
+            </Header>
+
+            <div className={'error-image'}>
+              <img src={errorIcon} alt='404 page illustration' />
+            </div>
+
+            <div>
               <List horizontal>
                 <List.Item>
                   <Link to='/'>
-                    Home
+                    <Button className={'primary-main'}>
+                      Home
+                    </Button>
                   </Link>
                 </List.Item>
                 <List.Item>
                   <Link to='/payment'>
-                    Proceed to Request
+                    <Button className={'order-button'}>
+                      Proceed to order
+                    </Button>
                   </Link>
                 </List.Item>
               </List>
-            </Container>
-          </Grid.Column>
-        </Grid>
-
-        <Footer />
-      </Aux>
+            </div>
+          </Container>
+        </Grid.Column>
+      </Grid>
     )
   }
 }

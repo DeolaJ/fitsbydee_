@@ -45,11 +45,11 @@ class Nav extends Component {
           <Grid className={'mobile-navitems'}>
             <Grid.Row columns={3}>
 
-              <Grid.Column textAlign='left' verticalAlign='middle'>
+              <Grid.Column textAlign='left'>
                 <Icon onClick={handleSidebar} size='big' name='bars'/>
               </Grid.Column>
 
-              <Grid.Column textAlign='center' verticalAlign='middle' style={{ position: 'relative'}}>
+              <Grid.Column as={Link} to={"/"} textAlign='center' verticalAlign='middle' style={{ position: 'relative', height: '55px', overflow: 'hidden' }}>
                 <img alt='logo icon' className={'mobile-logo'} src={logowhite}/>
               </Grid.Column>
 

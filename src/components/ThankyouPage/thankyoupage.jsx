@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import { Grid, Container } from 'semantic-ui-react'
+import { Grid, Container, Header } from 'semantic-ui-react'
 import './thankyoupage.scss'
 import Footer from '../Footer/Footer'
 import Aux from '../../hoc/Aux'
 
-class VerifyPage extends Component {
+class ThankyouPage extends Component {
 
   constructor (props) {
     super (props)
@@ -18,7 +18,7 @@ class VerifyPage extends Component {
     const { reference } = match.params
     var mobile = this.state.mobile;
     if (!mobile) {
-      const body = document.querySelector('.verifypage-container').clientWidth
+      const body = document.querySelector('.thankyoupage-container').clientWidth
       mobile = body <= 768 ? true : false
       this.setState({
         mobile: mobile
@@ -28,11 +28,11 @@ class VerifyPage extends Component {
     this.setState({
       success: (reference === 'thank-you') ? true : false
     })
-    // this.verifyTransaction(reference)
+    // this.thankyouTransaction(reference)
   }
 
-  // verifyTransaction = (reference) => {
-  //   return axios.post("/paystack-verify",
+  // thankyouTransaction = (reference) => {
+  //   return axios.post("/paystack-thankyou",
   //     {
   //       reference: reference
   //     }).then(response => {
@@ -55,20 +55,19 @@ class VerifyPage extends Component {
 
     return (
       <Aux>
-        <Grid className={'verifypage-container'}>
+        <Grid className={'thankyoupage-container'}>
           <Grid.Column width={16}>
             <Container textAlign='center' style={{ marginTop: '20%' }}>
-              {
-                success ? 
-                <h2>
-                  Thank you for paying for our services. We will love to hear from you
-                </h2>
+              <Header as="h2">
+                Thank you for filling the form. We will love to hear from you
+              </Header>
 
-                : 
-                <h2>
-                  The payment was not successful. Contact us for more details
-                </h2>
-              }
+              <Header as="h3">
+                One of our agents will contact you soon to confirm your order
+
+                <br/><br/>
+                However, if you will like to speak to an agent, click <a href="google.com">here</a>
+              </Header>
             </Container>
           </Grid.Column>
         </Grid>
@@ -79,4 +78,4 @@ class VerifyPage extends Component {
   }
 }
 
-export default VerifyPage
+export default ThankyouPage

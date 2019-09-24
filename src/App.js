@@ -31,8 +31,8 @@ const PaymentLoadable = Loadable({
   }
 });
 
-const TransactionsLoadable = Loadable({
-  loader: () => import('./components/Transactions/transactions'),
+const OrdersLoadable = Loadable({
+  loader: () => import('./components/Orders/orders'),
   loading() {
     return <Loader message={""} loading={true} />
   }
@@ -130,7 +130,7 @@ class App extends Component {
                 <Route exact path={'/'} component={Homepage} />
                 <Route path={'/contact'} component={ContactLoadable} />
                 <Route path={'/payment'} component={PaymentLoadable} />
-                <Route path={'/transactions'} component={TransactionsLoadable} />
+                <Route path={'/trackorders'} component={OrdersLoadable} />
                 <Route path={'/thankyou'} component={ThankyouLoadable} />
                 <Route component={ErrorLoadable} />
               </Switch>

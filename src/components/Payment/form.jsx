@@ -112,8 +112,6 @@ class CheckoutForm extends Component {
   orderNow = () => {
     const { email, full_name, description, address, gender, size, formValid } = this.state
 
-    const { unload } = this.props
-
     if (formValid === false) {
       document.getElementById("email").focus()
     }
@@ -131,7 +129,6 @@ class CheckoutForm extends Component {
         }).then(response => {
         console.log(response);
         this.endLoading("success");
-        unload();
       }).catch(error => {
         console.log(error);
         this.endLoading("fail")
@@ -154,7 +151,7 @@ class CheckoutForm extends Component {
 
     const genders = [
       { key: 'm', text: 'Male', value: 'male' },
-      { key: 'm', text: 'Female', value: 'female' }
+      { key: 'f', text: 'Female', value: 'female' }
     ]
 
     console.log(this.state)
