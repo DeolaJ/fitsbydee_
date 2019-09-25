@@ -52,10 +52,13 @@ class Orders extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>
-                  Time
+                  Time made
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   Email, Full name
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Phone number
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   Address
@@ -74,10 +77,13 @@ class Orders extends Component {
                 items.map(item => (
                   <Table.Row key={item.name}>
                     <Table.Cell>
-                      Time
+                      {item.timestamp}
                     </Table.Cell>
                     <Table.Cell>
                       {item.email}, {item.name}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {item.number}
                     </Table.Cell>
                     <Table.Cell>
                       {item.address}

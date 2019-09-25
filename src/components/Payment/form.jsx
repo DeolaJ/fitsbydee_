@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Form, Button, Checkbox, TextArea, Progress, Message } from 'semantic-ui-react'
+import { Form, Button, Container, Transition, TextArea, Progress, Message } from 'semantic-ui-react'
 import FileUploader from 'react-firebase-file-uploader';
 import Aux from '../../hoc/Aux'
 import axios from 'axios'
@@ -22,6 +22,8 @@ class CheckoutForm extends Component {
       address: '',
       size: '',
       gender: '',
+      number: '',
+      response: null,
       loading: false,
       emailValid: false,
       formValid: false
@@ -47,7 +49,7 @@ class CheckoutForm extends Component {
     this.setState(prevState => ({ file: filename, progress: 100, isUploading: false, complete: true, files: prevState.files.concat(filename) }));
     firebase
       .storage()
-      .ref("cvs")
+      .ref("orderpicture")
   }
 
   // getReference = () => {
@@ -66,10 +68,33 @@ class CheckoutForm extends Component {
     })
   }
 
-  endLoading = () => {
-    this.setState({
-      loading: false
-    })
+  endLoading = (status) => () => {
+    
+    if (status === "success") {
+      this.setState({
+        loading: false,
+        email: '',
+        full_name: '',
+        gender: '',
+        size: '',
+        address: '',
+        description: '',
+        number: '',
+        response: 'Your message was sent successfully'
+      })
+
+      setTimeout(
+        function () {
+          document.location.href = '/thankyou'
+        },
+        500);
+    } else if ( status === "fail" ) {
+      this.setState({
+        loading: false,
+        response: 'There was an error'
+      })
+      setTimeout(() => (this.setState({ response: null })), 3000)
+    }
   }
 
   handleChange = (e, { name, value }) => {
@@ -101,6 +126,17 @@ class CheckoutForm extends Component {
       emailValid: emailValid
     }, this.validateForm);
   }
+
+  getReference = () => {
+    const { full_name } = this.state;
+    let text = full_name;
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
+
+    for( let i=0; i < 15; i++ )
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  }
   
   validateForm = () => {
 
@@ -109,26 +145,51 @@ class CheckoutForm extends Component {
     });
   }
 
-  orderNow = () => {
-    const { email, full_name, description, address, gender, size, formValid } = this.state
+  writeToFirestore = (timestamp, ref) => () => {
+    const { db } = this.props;
+    const { email, full_name, description, address, gender, size, number } = this.state;
+    console.log(db, ref);
+    db.collection("order").doc(ref).set({
+      "email": email,
+      "name": full_name,
+      "description": description,
+      "address": address,
+      "size": size,
+      "gender": gender,
+      "number": number,
+      "timestamp": timestamp
+    }).then(function() {
+      console.log("Document successfully written!");
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error);
+    });
+  }
 
+  orderNow = () => {
+    const { email, full_name, description, address, gender, size, number, formValid } = this.state
+    let timestamp = Date();
+    var ref = this.getReference();
+    timestamp = timestamp.toString();
     if (formValid === false) {
       document.getElementById("email").focus()
     }
+    console.log(timestamp, ref);
 
     if (formValid === true) {
-      this.startLoading()
-
+      this.startLoading();
       axios.post('/order-form', {
           "email": email,
           "name": full_name,
-          "desscription": description,
+          "description": description,
           "address": address,
           "size": size,
-          "gender": gender
+          "gender": gender,
+          "number": number,
+          "timestamp": timestamp
         }).then(response => {
-        console.log(response);
-        this.endLoading("success");
+          console.log(response);
+          this.endLoading("success");
       }).catch(error => {
         console.log(error);
         this.endLoading("fail")
@@ -137,15 +198,15 @@ class CheckoutForm extends Component {
   }
 
   render () {
-    const { progress, complete, files, fileUploading, gender, 
-      email, full_name, description, address, size, loading
+    const { progress, complete, files, fileUploading, gender, response, 
+      email, full_name, description, address, size, number, loading
     } = this.state
 
     const sizes = [
-      { key: 's', text: 'Small', value: 'male' },
-      { key: 'm', text: 'Medium', value: 'female' },
-      { key: 'l', text: 'Female', value: 'female' },
-      { key: 'xl', text: 'Female', value: 'female' },
+      { key: 's', text: 'Small', value: 'small' },
+      { key: 'm', text: 'Medium', value: 'medium' },
+      { key: 'l', text: 'Large', value: 'large' },
+      { key: 'xl', text: 'Extra Large', value: 'extra large' },
       { key: 'o', text: 'Other (include in description)', value: 'other' }
     ]
 
@@ -158,11 +219,23 @@ class CheckoutForm extends Component {
 
     return (
       <Aux>
+        {
+          response &&
+          
+          <Transition.Group animation={'fly down'} duration={700}>
+            <Container textAlign="center">
+              <p>{response}</p>
+            </Container>
+          </Transition.Group>
+        }
+
         <Form>
 
           <Form.Input width={16} required label={"First name"} value={full_name} name="full_name" placeholder='First name, Last name' onChange={this.handleChange} />
           
           <Form.Input id={'email'} required label={"Email address"} value={email} name="email" placeholder='Enter your email address' onChange={this.handleChange} />
+
+          <Form.Input id={'number'} required label={"Phone number"} value={number} name="number" placeholder='+234----------' onChange={this.handleChange} />
           <Message
             error
             visible={(this.state.email.length > 0) && !this.state.emailValid}
@@ -172,7 +245,7 @@ class CheckoutForm extends Component {
           </Message>
           <Form.Field>
             <label>Delivery Address (OPTIONAL)</label>
-            <TextArea placeholder='Enter your Home Address' value={address} name="address" rows={2} onChange={this.handleChange}></TextArea>
+            <TextArea placeholder='Enter desired delivery address' value={address} name="address" rows={2} onChange={this.handleChange}></TextArea>
           </Form.Field>
           <Form.Select options={sizes} id={'size'} label={"Size (OPTIONAL)"} value={size} name="size" placeholder='Enter your desired size' onChange={this.handleChange} />
           <Form.Select options={genders} label={"Gender (OPTIONAL)"} value={gender} name="gender" placeholder='Gender' onChange={this.handleChange} />
@@ -183,7 +256,7 @@ class CheckoutForm extends Component {
           <Form.Group className={'upload-field'}>
             <Form.Field required>
               <label>
-                Upload your Picture if available
+                Upload your Picture, named appropriately (OPTIONAL)
               </label>
 
               <FileUploader
@@ -221,11 +294,11 @@ class CheckoutForm extends Component {
 
             </Form.Field>
           </Form.Group>
-          <Form.Group>
+          {/* <Form.Group>
             <Form.Field>
               <Checkbox label='I agree to the Terms and Conditions' />
             </Form.Field>
-          </Form.Group>
+          </Form.Group> */}
           <Button type='submit' className={'order-button'} floated="right" onClick={this.orderNow}>Place an Order</Button>
         </Form>
 

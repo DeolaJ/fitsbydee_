@@ -69,7 +69,7 @@ module.exports = (app) => {
       to: "fitsbydee@gmail.com",
       subject: req.body.name+" made an Order",
       text: "Name: "+req.body.name+". Email: "+req.body.email+". Message: "+req.body.message,
-      html: "<strong>"+req.body.name+", "+req.body.email+"</strong>"+"<br><br>"+req.body.message+"<br>"
+      html: "<strong>"+req.body.name+", "+req.body.email+"</strong>"+"<br><br>"+req.body.description+"<br>"+"<br><br>"+req.body.gender+"<br>"+"<br><br>"+req.body.size+"<br>"+"<br><br>"+req.body.address+"<br>"+"<br><br>"+req.body.number+"<br>"
     }
 
     smtpTransport.sendMail(mailOptions, function (error, response) {
