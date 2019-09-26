@@ -9,27 +9,29 @@ import Nav from './components/Nav/Nav'
 import Footer from './components/Footer/Footer'
 import VerticalSidebar from './components/Sidebar/VerticalSidebar'
 import Homepage from './components/Homepage/homepage'
+import Contact from './components/Contact/contact'
+import OrderPage from './components/OrderPage/orderpage'
 
-const HomepageLoadable = Loadable({
-  loader: () => import('./components/Homepage/homepage'),
-  loading() {
-    return <Loader message={""} loading={true} />
-  }
-});
+// const HomepageLoadable = Loadable({
+//   loader: () => import('./components/Homepage/homepage'),
+//   loading() {
+//     return <Loader message={""} loading={true} />
+//   }
+// });
 
-const ContactLoadable = Loadable({
-  loader: () => import('./components/Contact/contact'),
-  loading() {
-    return <Loader message={""} loading={true} />
-  }
-});
+// const ContactLoadable = Loadable({
+//   loader: () => import('./components/Contact/contact'),
+//   loading() {
+//     return <Loader message={""} loading={true} />
+//   }
+// });
 
-const PaymentLoadable = Loadable({
-  loader: () => import('./components/Payment/payment'),
-  loading() {
-    return <Loader message={""} loading={true} />
-  }
-});
+// const OrderLoadable = Loadable({
+//   loader: () => import('./components/Orderpage/orderpage'),
+//   loading() {
+//     return <Loader message={""} loading={true} />
+//   }
+// });
 
 const OrdersLoadable = Loadable({
   loader: () => import('./components/Orders/orders'),
@@ -128,8 +130,9 @@ class App extends Component {
             <Sidebar.Pusher dimmed={dimmed && visible} onClick={ !visible ? null : this.handleSidebar} >
               <Switch>
                 <Route exact path={'/'} component={Homepage} />
-                <Route path={'/contact'} component={ContactLoadable} />
-                <Route path={'/payment'} component={PaymentLoadable} />
+                <Route path={'/contact'} component={Contact} />
+                {/* Order stands for payment now */}
+                <Route path={'/order'} component={OrderPage} /> 
                 <Route path={'/trackorders'} component={OrdersLoadable} />
                 <Route path={'/thankyou'} component={ThankyouLoadable} />
                 <Route component={ErrorLoadable} />

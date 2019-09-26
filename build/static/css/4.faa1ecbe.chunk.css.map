@@ -1,0 +1,1 @@
+{"version":3,"sources":["orders.scss"],"names":[],"mappings":"AAAA,uBACE,QAAS,CACT,gBAAiB,CACjB,qBAAsB,CACtB,UAAY,CAJd,iCAQI,eAAgB","file":"4.faa1ecbe.chunk.css","sourcesContent":[".grid.orders-container {\n  margin: 0;\n  min-height: 100vh;\n  background-color: #333;\n  color: white;\n\n\n  .ui.table {\n    margin-top: 7rem;\n\n  }\n}"]}

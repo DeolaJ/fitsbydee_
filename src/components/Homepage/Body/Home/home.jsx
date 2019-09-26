@@ -53,7 +53,7 @@ class Home extends Component {
             </div>
             <List horizontal>
               <List.Item>
-                <Link to='/payment'>
+                <Link to='/order'>
                   <Button size='large' color='blue' className={'primary-main'}>
                     Order now
                   </Button>

@@ -37,8 +37,8 @@ class VerticalSidebar extends Component {
           }
 
           <Menu.Item as='div'>
-            <Link to='/payment'>
-              <Button className={'primary-main'} id="payment" onClick={changeActiveState}>
+            <Link to='/order'>
+              <Button className={'primary-main'} id="order" onClick={changeActiveState}>
                 Order now
               </Button>
             </Link>
