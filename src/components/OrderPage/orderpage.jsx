@@ -41,7 +41,7 @@ class OrderPage extends PureComponent {
     })
   }
     
-  componentWillMount () {
+  componentWillUnmount () {
     window.removeEventListener("resize", this.updateValue)
     window.removeEventListener("beforeunload", this.onUnload)
   }

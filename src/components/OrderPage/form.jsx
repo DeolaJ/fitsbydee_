@@ -77,11 +77,11 @@ class CheckoutForm extends Component {
         response: 'Your message was sent successfully'
       })
 
-      setTimeout(
-        function () {
-          document.location.href = '/thankyou'
-        },
-        500);
+      // setTimeout(
+      //   function () {
+      //     document.location.href = '/thankyou'
+      //   },
+      //   500);
     } else if ( status === "network" ) {
       setTimeout(() => (this.setState({ response: null })), 4000)
       this.setState({
@@ -158,13 +158,14 @@ class CheckoutForm extends Component {
       "gender": gender,
       "number": number,
       "timestamp": timestamp
-    }).then(function() {
+    }).then(() => {
+      this.endLoading();
+      unloadForm();
       console.log("Document successfully written!");
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.error("Error writing document: ", error);
     });
-    unloadForm();
   }
 
   orderNow = () => {
@@ -178,6 +179,8 @@ class CheckoutForm extends Component {
     console.log(timestamp, ref);
 
     if (formValid === true) {
+      let status;
+      this.startLoading();
       axios({
         method: 'post',
         url: 'https://api.sendgrid.com/v3/mail/send',
@@ -189,25 +192,45 @@ class CheckoutForm extends Component {
           "personalizations": [{
             "to": [{
               "email": "fitsbydee@gmail.com"
+            },
+            {
+              "email": "adeola.adeyemoj@yahoo.com"
             }],
-            "subject": "Sendgrid"
+            "subject": full_name+" made an order"
           }],
           "from": {
-            "email": "adeola.adeyemoJ@yahoo.com.com"
+            "email": email,
+            "name": full_name
           },
           "content": [
             {
               "type": "text/plain",
-              "value": "Adeola is here"
+              "value": "Name: "+full_name+". Email: "+email+". Cloth Size: "+size+ ". Delivery Address: "+address+". Gender: "+gender+". Description: "+description+". Phone number: "+number
             }
+            // {
+            //   "type": "text/html",
+            //   "value": "Name: "+full_name+". <br>Email address: "+email+". <br>Cloth Size: "+size+ ". <br>Delivery Address: "+address+". <br>Gender: "+gender+". <br>Description: "+description+". <br>Phone number: "+number
+            // }
           ]
-          // "html": "<strong>This is very nice</strong>"
         }
       }).then(response => {
-          // const modal = document.querySelector('.modal')
-        console.log(response)
+        status = "success";
+        console.log(response, "Status: "+status);
+        this.setState({
+          status: status,
+          timestamp: timestamp,
+          ref: ref
+        })
+        setTimeout(() => {
+          this.writeToFirestore();
+        }, 500);
       }).catch(error => {
         console.log(error);
+        status = "fail";
+        this.setState({
+          status: status
+        })
+        setTimeout(this.endLoading(), 500);
       })
       // sgMail.setApiKey('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')
       // const msg = {

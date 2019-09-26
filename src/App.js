@@ -110,7 +110,7 @@ class App extends Component {
   handleSidebar = () =>
   this.setState(prevState => ({ visible: !prevState.visible, navVisible: !prevState.navVisible }))
 
-  componentWillMount () {
+  componentWillUnmount () {
     window.removeEventListener("resize", this.updateValue)
   }
  

@@ -56,7 +56,7 @@ class Nav extends Component {
               <Grid.Column textAlign='right'>
                 <Link to='/order'>
                   <Button className={'primary-main icon'} id="order" onClick={changeActiveState}>
-                    <Icon size='large' name='location arrow'/>
+                    Order
                   </Button>
                 </Link>
               </Grid.Column>

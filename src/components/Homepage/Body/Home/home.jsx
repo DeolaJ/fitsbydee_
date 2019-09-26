@@ -48,7 +48,7 @@ class Home extends Component {
                 <br/>
                 shorts and caps at amazing prices. 
                 <br/>
-                We have a return policy &amp; delivery policy.
+                Incredible deliveries &amp; return policy.
               </p>
             </div>
             <List horizontal>
