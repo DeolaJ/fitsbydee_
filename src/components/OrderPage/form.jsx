@@ -77,11 +77,11 @@ class CheckoutForm extends Component {
         response: 'Your message was sent successfully'
       })
 
-      // setTimeout(
-      //   function () {
-      //     document.location.href = '/thankyou'
-      //   },
-      //   500);
+      setTimeout(
+        function () {
+          document.location.href = '/thankyou'
+        },
+        500);
     } else if ( status === "network" ) {
       setTimeout(() => (this.setState({ response: null })), 4000)
       this.setState({
