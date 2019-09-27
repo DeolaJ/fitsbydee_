@@ -4,6 +4,7 @@ import { Icon, List, Grid, Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import Aux from '../../hoc/Aux'
 import logowhite from '../../images/logowhite.png'
+import logowhitesmall from '../../images/logowhitemedium.png'
 
 class Nav extends Component {
 
@@ -50,7 +51,7 @@ class Nav extends Component {
               </Grid.Column>
 
               <Grid.Column as={Link} to={"/"} textAlign='center' verticalAlign='middle' style={{ position: 'relative', height: '55px', overflow: 'hidden' }}>
-                <img alt='logo icon' className={'mobile-logo'} src={logowhite}/>
+                <img alt='logo icon' className={'mobile-logo'} src={logowhitesmall}/>
               </Grid.Column>
 
               <Grid.Column textAlign='right'>

@@ -5,7 +5,6 @@ import Aux from '../../hoc/Aux'
 import axios from 'axios'
 import firebase from '../../firebase'
 import Loader from '../Loader/loader'
-import sgMail from '@sendgrid/mail'
 
 class CheckoutForm extends Component {
 
@@ -63,7 +62,7 @@ class CheckoutForm extends Component {
   
   endLoading = () => {
     const { status } = this.state;
-    console.log("status inside end loading:" + status)
+    // console.log("status inside end loading:" + status)
     if (status === "success") {
       this.setState({
         loading: false,
@@ -74,20 +73,14 @@ class CheckoutForm extends Component {
         address: '',
         description: '',
         number: '',
-        response: 'Your message was sent successfully'
+        response: 'Your order was made successfully'
       })
 
       setTimeout(
         function () {
-          document.location.href = '/thankyou'
+          document.location.href = '/thankyou/order'
         },
         500);
-    } else if ( status === "network" ) {
-      setTimeout(() => (this.setState({ response: null })), 4000)
-      this.setState({
-        loading: false,
-        response: 'There was a network timeout error. Please try again'
-      })
     } else if ( status === "fail" ) {
       setTimeout(() => (this.setState({ response: null })), 4000)
       this.setState({
@@ -145,28 +138,28 @@ class CheckoutForm extends Component {
     });
   }
 
-  writeToFirestore = () => {
-    const { db, unloadForm } = this.props;
-    const { email, full_name, description, address, gender, size, number, timestamp, ref } = this.state;
-    console.log(db, ref);
-    db.collection("order").doc(ref).set({
-      "email": email,
-      "name": full_name,
-      "description": description,
-      "address": address,
-      "size": size,
-      "gender": gender,
-      "number": number,
-      "timestamp": timestamp
-    }).then(() => {
-      this.endLoading();
-      unloadForm();
-      console.log("Document successfully written!");
-    })
-    .catch((error) => {
-      console.error("Error writing document: ", error);
-    });
-  }
+  // writeToFirestore = () => {
+  //   const { db, unloadForm } = this.props;
+  //   const { email, full_name, description, address, gender, size, number, timestamp, ref } = this.state;
+  //   console.log(db, ref);
+  //   db.collection("order").doc(ref).set({
+  //     "email": email,
+  //     "name": full_name,
+  //     "description": description,
+  //     "address": address,
+  //     "size": size,
+  //     "gender": gender,
+  //     "number": number,
+  //     "timestamp": timestamp
+  //   }).then(() => {
+  //     this.endLoading();
+  //     unloadForm();
+  //     console.log("Document successfully written!");
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error writing document: ", error);
+  //   });
+  // }
 
   orderNow = () => {
     const { email, full_name, description, address, gender, size, number, formValid } = this.state
@@ -176,108 +169,39 @@ class CheckoutForm extends Component {
     if (formValid === false) {
       document.getElementById("email").focus()
     }
-    console.log(timestamp, ref);
 
     if (formValid === true) {
       let status;
       this.startLoading();
-      axios({
-        method: 'post',
-        url: 'https://api.sendgrid.com/v3/mail/send',
-        headers: {
-          'Authorization':  'Bearer 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',
-          "Content-Type": "application/json"
-        },
-        data: {
-          "personalizations": [{
-            "to": [{
-              "email": "fitsbydee@gmail.com"
-            },
-            {
-              "email": "adeola.adeyemoj@yahoo.com"
-            }],
-            "subject": full_name+" made an order"
-          }],
-          "from": {
-            "email": email,
-            "name": full_name
-          },
-          "content": [
-            {
-              "type": "text/plain",
-              "value": "Name: "+full_name+". Email: "+email+". Cloth Size: "+size+ ". Delivery Address: "+address+". Gender: "+gender+". Description: "+description+". Phone number: "+number
-            }
-            // {
-            //   "type": "text/html",
-            //   "value": "Name: "+full_name+". <br>Email address: "+email+". <br>Cloth Size: "+size+ ". <br>Delivery Address: "+address+". <br>Gender: "+gender+". <br>Description: "+description+". <br>Phone number: "+number
-            // }
-          ]
-        }
-      }).then(response => {
+      const { db, unloadForm } = this.props;
+      db.collection("order").doc(ref).set({
+        "email": email,
+        "name": full_name,
+        "description": description,
+        "address": address,
+        "size": size,
+        "gender": gender,
+        "number": number,
+        "timestamp": timestamp
+      }).then(() => {
+        console.log("Document successfully written!");
         status = "success";
-        console.log(response, "Status: "+status);
         this.setState({
           status: status,
           timestamp: timestamp,
           ref: ref
         })
-        setTimeout(() => {
-          this.writeToFirestore();
-        }, 500);
-      }).catch(error => {
-        console.log(error);
+        setTimeout(this.endLoading(), 500);
+        unloadForm();
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
         status = "fail";
         this.setState({
           status: status
         })
         setTimeout(this.endLoading(), 500);
       })
-      // sgMail.setApiKey('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')
-      // const msg = {
-      //   to: 'fitsbydee@gmail.com',
-      //   from: 'adeola.adeyemoj@yahoo.com',
-      //   subject: 'Sending ooh',
-      //   text: 'Something nice',
-      //   html: "<strong>This is very nice</strong>"
-      // };
-      // sgMail.send(msg);
-      // let status;
-      // this.startLoading();
-      // axios.post('/order-form', {
-      //   "email": email,
-      //   "name": full_name,
-      //   "description": description,
-      //   "address": address,
-      //   "size": size,
-      //   "gender": gender,
-      //   "number": number,
-      //   "timestamp": timestamp
-      // }).then(response => {
-      //   if (response.data === "Email could not send due to error: Error: socket hang up") {
-      //     status = "network";
-      //   } else {
-      //     status = "success";
-      //   }
-      //   console.log(response, "Status: "+status);
-      //   this.setState({
-      //     status: status,
-      //     timestamp: timestamp,
-      //     ref: ref
-      //   })
-      //   setTimeout(() => {
-      //     if (status === "success") {
-      //       this.writeToFirestore();
-      //     }
-      //     this.endLoading()
-      //   }, 500);
-      // }).catch(error => {
-      //   status = "fail";
-      //   console.log(error);
-      //   this.setState({
-      //     status: status
-      //   })
-      //   setTimeout(this.endLoading(), 500);
-      // })
     }
   }
 
@@ -289,19 +213,17 @@ class CheckoutForm extends Component {
     // const key="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",
 
     const sizes = [
-      { key: 's', text: 'Small', value: 'small' },
-      { key: 'm', text: 'Medium', value: 'medium' },
-      { key: 'l', text: 'Large', value: 'large' },
-      { key: 'xl', text: 'Extra Large', value: 'extra large' },
-      { key: 'o', text: 'Other (include in description)', value: 'other' }
+      { key: 's', text: 'Small', value: 'Small' },
+      { key: 'm', text: 'Medium', value: 'Medium' },
+      { key: 'l', text: 'Large', value: 'Large' },
+      { key: 'xl', text: 'Extra Large', value: 'Extra Large' },
+      { key: 'o', text: 'Other (include in description)', value: 'Other' }
     ]
 
     const genders = [
-      { key: 'm', text: 'Male', value: 'male' },
-      { key: 'f', text: 'Female', value: 'female' }
+      { key: 'm', text: 'Male', value: 'Male' },
+      { key: 'f', text: 'Female', value: 'Female' }
     ]
-
-    console.log(this.state)
 
     return (
       <Aux>
@@ -311,8 +233,6 @@ class CheckoutForm extends Component {
           <Form.Input width={16} required label={"First name"} value={full_name} name="full_name" placeholder='First name, Last name' onChange={this.handleChange} />
           
           <Form.Input id={'email'} required label={"Email address"} value={email} name="email" placeholder='Enter your email address' onChange={this.handleChange} />
-
-          <Form.Input id={'number'} required label={"Phone number"} value={number} name="number" placeholder='+234----------' onChange={this.handleChange} />
           <Message
             error
             visible={(this.state.email.length > 0) && !this.state.emailValid}
@@ -320,12 +240,14 @@ class CheckoutForm extends Component {
           >
             <p>Email address is invalid</p>
           </Message>
+
+          <Form.Input id={'number'} required label={"Phone number"} value={number} name="number" placeholder='+234 - - - - - - - - - -' onChange={this.handleChange} />
           <Form.Field>
             <label>Delivery Address (OPTIONAL)</label>
             <TextArea placeholder='Enter desired delivery address' value={address} name="address" rows={2} onChange={this.handleChange}></TextArea>
           </Form.Field>
-          <Form.Select options={sizes} id={'size'} label={"Size (OPTIONAL)"} value={size} name="size" placeholder='Enter your desired size' onChange={this.handleChange} />
-          <Form.Select options={genders} label={"Gender (OPTIONAL)"} value={gender} name="gender" placeholder='Gender' onChange={this.handleChange} />
+          <Form.Select options={sizes} id={'size'} label={"Size (OPTIONAL)"} value={size} name="size" placeholder='Select your desired size' onChange={this.handleChange} />
+          <Form.Select options={genders} label={"Gender (OPTIONAL)"} value={gender} name="gender" placeholder='Select Gender' onChange={this.handleChange} />
           <Form.Field>
             <label>Brief Description (OPTIONAL)</label>
             <TextArea placeholder='Enter a brief description of your order' value={description} rows={2} name="description" onChange={this.handleChange}></TextArea>
@@ -371,11 +293,6 @@ class CheckoutForm extends Component {
 
             </Form.Field>
           </Form.Group>
-          {/* <Form.Group>
-            <Form.Field>
-              <Checkbox label='I agree to the Terms and Conditions' />
-            </Form.Field>
-          </Form.Group> */}
           <Button type='submit' className={'order-button'} floated="right" onClick={this.orderNow}>Place an Order</Button>
         </Form>
 

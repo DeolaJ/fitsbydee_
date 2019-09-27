@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import './errorpage.scss'
 import Footer from '../Footer/Footer'
 import Aux from '../../hoc/Aux'
-import errorIcon from '../../images/logowhitebox.png'
+import errorIcon from '../../images/logowhiteboxmedium.png'
 
 class ErrorPage extends Component {
 

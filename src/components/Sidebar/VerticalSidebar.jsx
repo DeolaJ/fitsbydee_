@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Icon, Sidebar, Menu, Button } from 'semantic-ui-react'
 import './Sidebar.scss'
 import { Link } from 'react-router-dom'
-import logo from "../../images/logo.png"
+import logo from "../../images/logomedium.png"
 
 class VerticalSidebar extends Component {
 

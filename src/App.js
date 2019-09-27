@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.scss'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, HashRouter, Switch, Route } from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
 import { Sidebar, Segment } from "semantic-ui-react"
 import Loadable from 'react-loadable';
@@ -120,7 +120,7 @@ class App extends Component {
     return (
       <div className={'body'}>
 
-        <Router basename={'/'}>
+        <HashRouter basename={'/'}>
 
           <Nav navItems={navItems} activeitem={activeitem} mobile={mobile} handleSidebar={this.handleSidebar} changeActiveState={this.changeActiveState} navVisible={navVisible} />
 
@@ -141,7 +141,7 @@ class App extends Component {
           </Sidebar.Pushable>
           
           <Footer/>
-        </Router>
+        </HashRouter>
 
       </div>
     )

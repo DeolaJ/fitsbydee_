@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import { Grid, Header, Container, Form, Button, Transition, Message, TextArea } from 'semantic-ui-react'
-import Aux from '../../hoc/Aux'
 import './contact.scss'
 import axios from 'axios'
 import firebase from '../../firebase'
@@ -14,7 +13,8 @@ class Contact extends Component {
       loading: false,
       email: '',
       full_name: '',
-      message: '', 
+      message: '',
+      db: {},
       emailValid: false,
       formValid: false,
       mobile: null,
@@ -26,15 +26,14 @@ class Contact extends Component {
 
   componentDidMount () {
     const body = document.querySelector('.contact-container').clientWidth
-    window.addEventListener("resize", this.updateValue)
-
-    if (body <= 768 ) {
+    window.addEventListener("resize", this.updateValue);
+    var db = firebase.firestore();
+    if (!mobile) {
+      const body = document.querySelector('body').clientWidth
+      mobile = body <= 768 ? true : false
       this.setState({
-        mobile: true
-      })
-    } else if (body > 768) {
-      this.setState({
-        mobile: false
+        mobile,
+        db
       })
     }
   }
@@ -45,21 +44,52 @@ class Contact extends Component {
     })
   }
 
-  endLoading = (status) => () => {
-    this.setState( status === "success" ? {
-      loading: false,
-      email: '',
-      full_name: '',
-      message: '',
-      response: 'Your message was sent successfully'
-    } 
-    : 
-    { 
-      loading: false,
-      response: 'There was an error'
-    })
+  endLoading = () => {
+    const { status } = this.state;
+    // console.log("status inside end loading:" + status)
+    if (status === "success") {
+      this.setState({
+        loading: false,
+        email: '',
+        full_name: '',
+        gender: '',
+        size: '',
+        address: '',
+        description: '',
+        number: '',
+        response: 'Your message was sent successfully'
+      })
 
-    setTimeout(() => (this.setState({ response: null })), 3000)
+      setTimeout(
+        function () {
+          document.location.href = '/thankyou/contact'
+        },
+        500);
+    } else if ( status === "fail" ) {
+      setTimeout(() => (this.setState({ response: null })), 4000)
+      this.setState({
+        loading: false,
+        response: 'There was an error. Please try again'
+      })
+    }
+  }
+
+  getReference = () => {
+    const { full_name } = this.state;
+    let text = full_name;
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
+
+    for( let i=0; i < 15; i++ )
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  }
+  
+  validateForm = () => {
+
+    this.setState({
+      formValid: this.state.emailValid
+    });
   }
 
   updateValue = () => {
@@ -110,27 +140,40 @@ class Contact extends Component {
 
   sendMessage = () => {
     const { email, full_name, message, formValid } = this.state
-
-    const { unload } = this.props
+    let timestamp = Date();
+    var ref = this.getReference();
+    timestamp = timestamp.toString();
 
     if (formValid === false) {
       document.getElementById("email").focus()
     }
 
     if (formValid === true) {
-      this.startLoading()
-
-      axios.post('/contact-form', {
-          "email": email,
-          "name": full_name,
-          "message": message
-        }).then(response => {
-        console.log(response);
-        this.endLoading("success");
-        unload();
-      }).catch(error => {
-        console.log(error);
-        this.endLoading("fail")
+      let status;
+      this.startLoading();
+      const { db } = this.props;
+      db.collection("contact").doc(ref).set({
+        "email": email,
+        "name": full_name,
+        "message": message,
+        "timestamp": timestamp
+      }).then(() => {
+        console.log("Document successfully written!");
+        status = "success";
+        this.setState({
+          status: status,
+          timestamp: timestamp,
+          ref: ref
+        })
+        setTimeout(this.endLoading(), 500);
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+        status = "fail";
+        this.setState({
+          status: status
+        })
+        setTimeout(this.endLoading(), 500);
       })
     }
   }
@@ -141,7 +184,7 @@ class Contact extends Component {
 
   render () {
 
-    const { email, full_name, message, mobile, loading, response } = this.state;
+    const { email, full_name, message, loading, response } = this.state;
     console.log(this.state)
 
     return (
@@ -155,16 +198,6 @@ class Contact extends Component {
               <Header.Subheader>For requests and enquiries</Header.Subheader>
             </Header>
 
-            {
-              response &&
-              
-              <Transition.Group animation={'fly down'} duration={700}>
-                <Container textAlign="center">
-                  <p>{response}</p>
-                </Container>
-              </Transition.Group>
-            }
-            
             <Form>
               <Form.Input width={16} required label={"Full name"} value={full_name} name="full_name" placeholder='First name, Last name' onChange={this.handleChange} />
               
@@ -187,9 +220,20 @@ class Contact extends Component {
         </Grid.Column>
 
         {
+          response &&
+
+          <Transition.Group animation={'fly left'} duration={700}>
+            <Container className={'response-message'} textAlign="center">
+              <p>{response}</p>
+            </Container>
+          </Transition.Group>
+          
+        }
+
+        {
           loading && 
 
-          <Loader loading={loading} message={"Sending"} />
+          <Loader loading={loading} message={"Sending message"} />
         }
       </Grid>
     )

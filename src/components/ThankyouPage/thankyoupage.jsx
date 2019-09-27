@@ -10,7 +10,8 @@ class ThankyouPage extends Component {
     super (props)
     this.state = {
       mobile: null,
-      success: null
+      order: null,
+      contact: null
     }
   }
   componentDidMount () {
@@ -26,48 +27,49 @@ class ThankyouPage extends Component {
     }
 
     this.setState({
-      success: (reference === 'thank-you') ? true : false
+      order: (reference === 'order') ? true : false,
+      contact: (reference === 'contact') ? true : false
     })
-    // this.thankyouTransaction(reference)
   }
 
-  // thankyouTransaction = (reference) => {
-  //   return axios.post("/paystack-thankyou",
-  //     {
-  //       reference: reference
-  //     }).then(response => {
-  //       // const modal = document.querySelector('.modal')
-      
-  //       const success = response.data.data.message === 'Verification successful' ? true : false
-  //     this.setState({
-  //       success
-  //     })
-  //     // this.handleOpen()
-  //     // const iframe = document.querySelector('.modal iframe')
-  //     // iframe.setAttribute('src', response.data.data.authorization_url);
-  //   }).catch(error => {
-  //     console.log(error);
-  //   })
-  // }
-
   render () {
-    const { success } = this.state
+    const { order, contact } = this.state
 
     return (
       <Aux>
         <Grid className={'thankyoupage-container'}>
           <Grid.Column width={16}>
             <Container textAlign='center' style={{ marginTop: '20%' }}>
-              <Header as="h2">
-                Thank you for filling the form. We will love to hear from you
-              </Header>
+              {
+                order &&
 
-              <Header as="h3">
-                One of our agents will contact you soon to confirm your order
+                <Aux>
+                  <Header as="h2">
+                    Thank you for filling the form. We will love to hear from you
+                  </Header>
 
-                <br/><br/>
-                However, if you will like to speak to an agent, click <a href="google.com">here</a>
-              </Header>
+                  <Header as="h3">
+                    One of our agents will contact you soon to confirm your order
+
+                    <br/><br/>
+                    However, if you will like to chat with an agent now, click <a href="https://wa.me/2349057435025" rel="noreferrer noopener" target={"_blank"}>here</a>
+                  </Header>
+                </Aux>
+              }
+
+              {
+                contact &&
+
+                <Aux>
+                  <Header as="h2">
+                    Thank you for filling the form. We will send a response soon
+                  </Header>
+
+                  <Header as="h3">
+                    However, if you will like to chat with an agent now, click <a href="https://wa.me/2349057435025"  rel="noreferrer noopener" target={"_blank"}>here</a>
+                  </Header>
+                </Aux>
+              }
             </Container>
           </Grid.Column>
         </Grid>

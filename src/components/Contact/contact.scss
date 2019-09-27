@@ -42,5 +42,33 @@
       width: 100%;
     }
   }
+
+  .response-message {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    width: auto !important;
+    padding: 1.5rem;
+    background-color: rgba(0, 0, 0, .8);
+    border-radius: 10px;
+
+    p {
+      color: white;
+      word-break: break-word;
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    .response-message.container {
+      right: 0;
+      padding: 1rem;
+
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
   
 }
