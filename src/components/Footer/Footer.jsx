@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Header, Button, Container } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
 import './Footer.scss'
 
 class Footer extends Component {

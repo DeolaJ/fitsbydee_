@@ -1,9 +1,7 @@
 import React, {Component} from 'react'
-import { Grid, Button, List, Container, Header, Icon } from 'semantic-ui-react'
+import { Grid, Button, List, Container, Header } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import './errorpage.scss'
-import Footer from '../Footer/Footer'
-import Aux from '../../hoc/Aux'
 import errorIcon from '../../images/logowhiteboxmedium.png'
 
 class ErrorPage extends Component {

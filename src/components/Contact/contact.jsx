@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import { Grid, Header, Container, Form, Button, Transition, Message, TextArea } from 'semantic-ui-react'
 import './contact.scss'
-import axios from 'axios'
 import firebase from '../../firebase'
 import Loader from '../Loader/loader'
 
@@ -25,9 +24,10 @@ class Contact extends Component {
   }
 
   componentDidMount () {
-    const body = document.querySelector('.contact-container').clientWidth
     window.addEventListener("resize", this.updateValue);
     var db = firebase.firestore();
+    var { mobile } = this.state;
+
     if (!mobile) {
       const body = document.querySelector('body').clientWidth
       mobile = body <= 768 ? true : false
@@ -62,7 +62,7 @@ class Contact extends Component {
 
       setTimeout(
         function () {
-          document.location.href = '/thankyou/contact'
+          document.location.href = '/#/thankyou/contact'
         },
         500);
     } else if ( status === "fail" ) {
@@ -151,7 +151,7 @@ class Contact extends Component {
     if (formValid === true) {
       let status;
       this.startLoading();
-      const { db } = this.props;
+      const { db } = this.state;
       db.collection("contact").doc(ref).set({
         "email": email,
         "name": full_name,

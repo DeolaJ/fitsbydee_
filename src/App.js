@@ -134,7 +134,7 @@ class App extends Component {
                 {/* Order stands for payment now */}
                 <Route path={'/order'} component={OrderPage} /> 
                 <Route path={'/trackorders'} component={OrdersLoadable} />
-                <Route path={'/thankyou'} component={ThankyouLoadable} />
+                <Route path={'/thankyou/:reference'} component={ThankyouLoadable} />
                 <Route component={ErrorLoadable} />
               </Switch>
             </Sidebar.Pusher>

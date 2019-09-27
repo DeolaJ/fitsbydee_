@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
+import { Grid, Header, Image, Segment } from 'semantic-ui-react'
 import loader from '../../images/loader.svg'
 import Typist from 'react-typist'
 import './loader.scss'

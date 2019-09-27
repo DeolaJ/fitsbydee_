@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import { Form, Button, Container, Transition, TextArea, Progress, Message } from 'semantic-ui-react'
 import FileUploader from 'react-firebase-file-uploader';
 import Aux from '../../hoc/Aux'
-import axios from 'axios'
 import firebase from '../../firebase'
 import Loader from '../Loader/loader'
 
@@ -34,7 +33,6 @@ class CheckoutForm extends Component {
     this.handleUploadStart = this.handleUploadStart.bind(this)
     this.handleUploadSuccess = this.handleUploadSuccess.bind(this)
     this.endLoading = this.endLoading.bind(this)
-    this.writeToFirestore = this.writeToFirestore.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
   
@@ -78,7 +76,7 @@ class CheckoutForm extends Component {
 
       setTimeout(
         function () {
-          document.location.href = '/thankyou/order'
+          document.location.href = '/#/thankyou/order'
         },
         500);
     } else if ( status === "fail" ) {
@@ -91,7 +89,6 @@ class CheckoutForm extends Component {
   }
 
   handleChange = (e, { name, value }) => {
-    console.log(name, value)
     if ( name === "email") {
       
       this.setState(

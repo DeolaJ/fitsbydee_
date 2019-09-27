@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Icon, Sidebar, Menu, Button } from 'semantic-ui-react'
 import './Sidebar.scss'
 import { Link } from 'react-router-dom'

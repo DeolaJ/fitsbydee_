@@ -18,7 +18,6 @@ class OrderPage extends PureComponent {
   }
 
   componentDidMount () {
-    const { match } = this.props
     var mobile = this.state.mobile;
     window.addEventListener("resize", this.updateValue)
     window.addEventListener("beforeunload", this.onUnload)

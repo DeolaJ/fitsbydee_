@@ -14,6 +14,7 @@ class ThankyouPage extends Component {
       contact: null
     }
   }
+  
   componentDidMount () {
     const { match } = this.props
     const { reference } = match.params
@@ -25,6 +26,7 @@ class ThankyouPage extends Component {
         mobile: mobile
       })
     }
+    console.log(match)
 
     this.setState({
       order: (reference === 'order') ? true : false,
