@@ -97,7 +97,6 @@ class Contact extends Component {
   }
 
   handleChange = (e, { name, value }) => {
-    console.log(name, value)
     if ( name === "email") {
       
       this.setState(
@@ -181,7 +180,6 @@ class Contact extends Component {
   render () {
 
     const { email, full_name, message, loading, response } = this.state;
-    console.log(this.state)
 
     return (
       <Grid stackable className={'contact-container'}>

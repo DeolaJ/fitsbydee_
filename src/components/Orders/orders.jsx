@@ -39,7 +39,6 @@ class Orders extends Component {
 
     const { items, mobile } = this.state
 
-    console.log(this.state)
     return (
       <Grid className={'orders-container'}>
         
