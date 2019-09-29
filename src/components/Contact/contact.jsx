@@ -52,11 +52,7 @@ class Contact extends Component {
         loading: false,
         email: '',
         full_name: '',
-        gender: '',
-        size: '',
-        address: '',
-        description: '',
-        number: '',
+        message: '',
         response: 'Your message was sent successfully'
       })
 
@@ -211,7 +207,7 @@ class Contact extends Component {
               </Message>
               <Form.Field width={16}>
                 <label>Message</label>
-                <TextArea placeholder='Enter your request or enquiry' value={message} name="message" rows={4} onChange={this.handleChange}></TextArea>
+                <TextArea placeholder='Enter your request or enquiry' value={message} required name="message" rows={4} onChange={this.handleChange}></TextArea>
               </Form.Field>
               <Button type='submit' floated="right" className={'primary-sub'} onClick={this.sendMessage}>Send</Button>
             </Form>
