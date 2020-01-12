@@ -11,27 +11,7 @@ import VerticalSidebar from './components/Sidebar/VerticalSidebar'
 import Homepage from './components/Homepage/homepage'
 import Contact from './components/Contact/contact'
 import OrderPage from './components/OrderPage/orderpage'
-
-// const HomepageLoadable = Loadable({
-//   loader: () => import('./components/Homepage/homepage'),
-//   loading() {
-//     return <Loader message={""} loading={true} />
-//   }
-// });
-
-// const ContactLoadable = Loadable({
-//   loader: () => import('./components/Contact/contact'),
-//   loading() {
-//     return <Loader message={""} loading={true} />
-//   }
-// });
-
-// const OrderLoadable = Loadable({
-//   loader: () => import('./components/Orderpage/orderpage'),
-//   loading() {
-//     return <Loader message={""} loading={true} />
-//   }
-// });
+import ProductGallery from './components/ProductGallery/productgallery'
 
 const OrdersLoadable = Loadable({
   loader: () => import('./components/Orders/orders'),
@@ -63,6 +43,11 @@ class App extends Component {
         link: '/'
       },
       {
+        id: 'products',
+        name: 'Products',
+        link: '/products'
+      },
+      {
         id: 'contact',
         name: 'Contact',
         link: '/contact'
@@ -78,11 +63,11 @@ class App extends Component {
   }
 
   componentDidMount () {
-    const body = document.querySelector('body').clientWidth
+    const body = document.body.clientWidth
     window.addEventListener("resize", this.updateValue)
     const url = window.location.href
 
-    this.setState(url.includes("contact") ? { activeitem: "contact"} : (url.includes("payment") ? { activeitem: "contact"} : { activeitem: "home"}))
+    this.setState(url.includes("contact") ? { activeitem: "contact"} : (url.includes("products") ? { activeitem: "products"} : (url.includes("payment") ? { activeitem: "contact"} : { activeitem: "home"})))
 
     if (body <= 768 ) {
       this.setState({
@@ -100,7 +85,7 @@ class App extends Component {
   }
 
   updateValue = () => {
-    const body = document.querySelector('body').clientWidth
+    const body = document.body.clientWidth
     const mobile = body <= 768 ? true : false
     this.setState({
       mobile: mobile
@@ -115,24 +100,43 @@ class App extends Component {
   }
  
   render () {
-    const { navItems, mobile, animation, activeitem, dimmed, direction, visible, navVisible } = this.state
+    const { navItems, mobile, animation, activeitem, 
+      dimmed, direction, visible, navVisible } = this.state
     
     return (
       <div className={'body'}>
 
         <HashRouter basename={'/'}>
 
-          <Nav navItems={navItems} activeitem={activeitem} mobile={mobile} handleSidebar={this.handleSidebar} changeActiveState={this.changeActiveState} navVisible={navVisible} />
+          <Nav 
+            navItems={navItems} 
+            activeitem={activeitem} 
+            mobile={mobile} 
+            handleSidebar={this.handleSidebar} 
+            changeActiveState={this.changeActiveState} 
+            navVisible={navVisible} 
+          />
 
           <Sidebar.Pushable as={Segment} style={{margin: '0', border: 'none' }} >
-            <VerticalSidebar activeitem={activeitem} animation={animation} direction={direction} visible={visible} handleSidebar={this.handleSidebar}  changeActiveState={this.changeActiveState} navItems={navItems} />
+            <VerticalSidebar 
+              activeitem={activeitem} 
+              animation={animation} 
+              direction={direction} 
+              visible={visible} 
+              handleSidebar={this.handleSidebar}  
+              changeActiveState={this.changeActiveState} 
+              navItems={navItems} 
+            />
 
-            <Sidebar.Pusher dimmed={dimmed && visible} onClick={ !visible ? null : this.handleSidebar} >
+            <Sidebar.Pusher 
+              dimmed={dimmed && visible} 
+              onClick={ !visible ? null : this.handleSidebar} 
+            >
               <Switch>
                 <Route exact path={'/'} component={Homepage} />
                 <Route path={'/contact'} component={Contact} />
-                {/* Order stands for payment now */}
                 <Route path={'/order'} component={OrderPage} /> 
+                <Route path={'/products'} render={(props) => <ProductGallery {...props} mobile={mobile} />} /> 
                 <Route path={'/trackorders'} component={OrdersLoadable} />
                 <Route path={'/thankyou/:reference'} component={ThankyouLoadable} />
                 <Route component={ErrorLoadable} />

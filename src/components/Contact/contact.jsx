@@ -203,7 +203,7 @@ class Contact extends Component {
               >
                 <p>Email address is invalid</p>
               </Message>
-              <Form.Field width={16}>
+              <Form.Field width={16} required>
                 <label>Message</label>
                 <TextArea placeholder='Enter your request or enquiry' value={message} required name="message" rows={4} onChange={this.handleChange}></TextArea>
               </Form.Field>

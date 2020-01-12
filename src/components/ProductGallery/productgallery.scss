@@ -1,0 +1,53 @@
+.productgallery-container.grid {
+  min-height: 100vh;
+  margin: 0;
+  background-blend-mode: multiply;
+  background: #141E30;
+  background: -webkit-linear-gradient(to right, #243B55, #141E30); 
+  background: linear-gradient(to right, #243B55, #141E30);
+
+  .sixteen.wide.column {
+    margin-top: 10rem;
+    margin-bottom: 8rem;
+  }
+
+  .products-body { 
+
+    .header {
+      color: white;
+      margin-bottom: 2rem;
+    }
+
+    #products {
+
+      > div {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        > div {
+          flex-basis: 28%;
+          width: 28%;
+
+          @media (max-width: 940px) {
+            flex-basis: 40%;
+            width: 40%;
+          }
+
+          img {
+            border-radius: 1rem;
+          }
+        }
+      }
+    }
+
+    .responsive {
+      margin-bottom: 3rem;
+
+      .desc {
+        color: white;
+      }
+    }
+
+  }
+}
