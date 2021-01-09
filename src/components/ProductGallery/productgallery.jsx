@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Grid, Button, List, Container, Header } from 'semantic-ui-react'
+import { Grid, Container, Header } from 'semantic-ui-react'
 import { CloudinaryContext, Transformation, Image } from 'cloudinary-react';
 import './productgallery.scss'
 import axios from 'axios'

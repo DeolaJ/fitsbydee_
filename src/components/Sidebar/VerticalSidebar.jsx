@@ -29,7 +29,10 @@ class VerticalSidebar extends Component {
           {
             navItems.map(item => (
               <Menu.Item key={item.id} as={Link} to={item.link} active={activeitem === item.id}
-                onClick={changeActiveState, handleSidebar}>
+                onClick={() => {
+                  changeActiveState();
+                  handleSidebar();
+                }}>
                 {item.name}
               </Menu.Item>
             ))

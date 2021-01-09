@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.scss'
-import { BrowserRouter as Router, HashRouter, Switch, Route } from 'react-router-dom'
+import { HashRouter, Switch, Route } from 'react-router-dom'
 import 'semantic-ui-css/semantic.min.css'
 import { Sidebar, Segment } from "semantic-ui-react"
 import Loadable from 'react-loadable';
