@@ -40,7 +40,10 @@ class VerticalSidebar extends Component {
 
           <Menu.Item as='div'>
             <Link to='/order'>
-              <Button className={'primary-main'} id="order" onClick={changeActiveState, handleSidebar}>
+              <Button className={'primary-main'} id="order" onClick={() => {
+                changeActiveState();
+                handleSidebar();
+              }}>
                 Order now
               </Button>
             </Link>
